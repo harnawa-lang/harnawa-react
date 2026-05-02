@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <clipPath id="a">
+      <rect x="0" y="0" width="64" height="38"/>
+    </clipPath>
+  </defs>
+  <!-- Sun rays clipped above dome line -->
+  <g clip-path="url(#a)">
+    <ellipse cx="32" cy="24" rx="4"   ry="12"   fill="#f5a623"/>
+    <ellipse cx="32" cy="24" rx="3.8" ry="11.5" transform="rotate(-24 32 38)" fill="#f5a623"/>
+    <ellipse cx="32" cy="24" rx="3.8" ry="11.5" transform="rotate( 24 32 38)" fill="#f5a623"/>
+    <ellipse cx="32" cy="24" rx="3.5" ry="10.5" transform="rotate(-50 32 38)" fill="#e8821e"/>
+    <ellipse cx="32" cy="24" rx="3.5" ry="10.5" transform="rotate( 50 32 38)" fill="#e8821e"/>
+    <ellipse cx="32" cy="24" rx="3"   ry="9.5"  transform="rotate(-76 32 38)" fill="#c97a34"/>
+    <ellipse cx="32" cy="24" rx="3"   ry="9.5"  transform="rotate( 76 32 38)" fill="#c97a34"/>
+  </g>
+  <!-- Sun dome (rising semicircle) -->
+  <path d="M8 38 Q8 58 32 58 Q56 58 56 38 Z" fill="#c97a34"/>
+</svg>
