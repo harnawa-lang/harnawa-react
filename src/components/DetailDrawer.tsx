@@ -631,9 +631,8 @@ export function DetailDrawer({ shipmentId, onClose, onOpenUpdate }: Props) {
             )}
 
             {/* ── Permanent delete ── */}
-            {true && (
-              <>
-                {!confirmDelete ? (
+            <>
+              {!confirmDelete ? (
                   <button
                     onClick={() => { setConfirmDelete(true); setConfirmCancel(false) }}
                     style={{
@@ -703,8 +702,7 @@ export function DetailDrawer({ shipmentId, onClose, onOpenUpdate }: Props) {
                     </div>
                   </div>
                 )}
-              </>
-            )}
+            </>
 
           </div>
 
