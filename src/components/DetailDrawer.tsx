@@ -630,8 +630,8 @@ export function DetailDrawer({ shipmentId, onClose, onOpenUpdate }: Props) {
               </>
             )}
 
-            {/* ── Permanent delete (admin only) ── */}
-            {isAdmin && (
+            {/* ── Permanent delete ── */}
+            {true && (
               <>
                 {!confirmDelete ? (
                   <button
