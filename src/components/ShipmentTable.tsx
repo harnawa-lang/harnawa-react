@@ -325,7 +325,7 @@ export function ShipmentTable({ search, showCreate, onCloseCreate, onNewShipment
                 {/* ── COL 6: Progress + ETD/ETA ── */}
                 <div style={{ minWidth: 0, paddingTop: 4 }}>
                   <RouteBar shipment={s} width={160} showLabels={false} />
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8, gap: 6 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8, gap: 6, flexWrap: 'wrap' as const }}>
                     <span style={{
                       display: 'inline-flex', alignItems: 'center', gap: 3,
                       fontFamily: '"JetBrains Mono", monospace', fontSize: 9.5, fontWeight: 600,
@@ -351,6 +351,25 @@ export function ShipmentTable({ search, showCreate, onCloseCreate, onNewShipment
                       <ETAChip shipment={s} />
                     </span>
                   </div>
+                  {s.free_days != null && (
+                    <div style={{ marginTop: 6, width: '100%' }}>
+                      <span style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 4,
+                        fontFamily: '"JetBrains Mono", monospace', fontSize: 9.5, fontWeight: 600,
+                        padding: '3px 7px', borderRadius: 4,
+                        background: mode === 'dark' ? '#1a1f2e' : '#f0f4ff',
+                        color: mode === 'dark' ? '#a5b4fc' : '#4338ca',
+                        border: `1px solid ${mode === 'dark' ? '#2d3a5e' : '#c7d2fe'}`,
+                        whiteSpace: 'nowrap',
+                      }}>
+                        <svg width="9" height="9" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+                          <rect x="1" y="2" width="10" height="9" rx="1.5"/>
+                          <path d="M4 1v2M8 1v2M1 5h10"/>
+                        </svg>
+                        Free {s.free_days}d at POD
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 {/* ── COL 7: Material ── */}

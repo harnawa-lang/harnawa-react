@@ -36,6 +36,7 @@ export function CreateShipmentModal({ onClose, existingIds, existingSuppliers }:
     incoterm: 'FOB', etd: '', eta: '',
     value: '', currency: 'USD',
     custom_duty: '', gst: '',
+    free_days: '',
   })
 
   const [supplierInput, setSupplierInput] = useState('')
@@ -125,6 +126,7 @@ export function CreateShipmentModal({ onClose, existingIds, existingSuppliers }:
       currency: form.currency,
       custom_duty: form.custom_duty !== '' ? Number(form.custom_duty) : undefined,
       gst: form.gst !== '' ? Number(form.gst) : undefined,
+      free_days: form.free_days !== '' ? Number(form.free_days) : undefined,
       stage: form.stage,
       status_note: form.statusNote || STAGES[form.stage],
       delayed: false,
@@ -345,6 +347,15 @@ export function CreateShipmentModal({ onClose, existingIds, existingSuppliers }:
             </FormField>
             <FormField label="ETA *">
               <TextInput type="date" value={form.eta} onChange={v => set('eta', v)} />
+            </FormField>
+            <FormField label="Free Days at POD">
+              <TextInput
+                type="number"
+                value={form.free_days}
+                onChange={v => set('free_days', v)}
+                placeholder="e.g. 14"
+                mono
+              />
             </FormField>
           </div>
           <div style={{ display: 'flex', gap: 14 }}>

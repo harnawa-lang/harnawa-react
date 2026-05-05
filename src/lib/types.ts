@@ -57,6 +57,7 @@ export interface Shipment {
   history: HistoryEntry[]
   custom_duty?: number   // percentage e.g. 7.5
   gst?: number           // percentage e.g. 18
+  free_days?: number     // free days at POD before demurrage
   cancelled?: boolean
   created_at?: string
   updated_at?: string
