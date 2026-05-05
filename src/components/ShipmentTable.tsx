@@ -384,7 +384,7 @@ export function ShipmentTable({ search, showCreate, onCloseCreate, onNewShipment
                           border: `1px solid ${mode === 'dark' ? '#713f12' : '#fde68a'}`,
                           whiteSpace: 'nowrap',
                         }}>
-                          Duty {s.custom_duty}%
+                          Duty {fmtMoney(s.value * s.custom_duty / 100, s.currency)}
                         </span>
                       )}
                       {s.gst != null && (
@@ -395,7 +395,7 @@ export function ShipmentTable({ search, showCreate, onCloseCreate, onNewShipment
                           border: `1px solid ${mode === 'dark' ? '#1e3a5f' : '#bfdbfe'}`,
                           whiteSpace: 'nowrap',
                         }}>
-                          GST {s.gst}%
+                          GST {fmtMoney(s.value * s.gst / 100, s.currency)}
                         </span>
                       )}
                     </div>
