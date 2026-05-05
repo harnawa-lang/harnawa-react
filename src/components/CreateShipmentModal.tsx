@@ -35,6 +35,7 @@ export function CreateShipmentModal({ onClose, existingIds, existingSuppliers }:
     pod: '', podCode: '',
     incoterm: 'FOB', etd: '', eta: '',
     value: '', currency: 'USD',
+    custom_duty: '', gst: '',
   })
 
   const [supplierInput, setSupplierInput] = useState('')
@@ -122,6 +123,8 @@ export function CreateShipmentModal({ onClose, existingIds, existingSuppliers }:
       eta: form.eta,
       value: Number(form.value) || 0,
       currency: form.currency,
+      custom_duty: form.custom_duty !== '' ? Number(form.custom_duty) : undefined,
+      gst: form.gst !== '' ? Number(form.gst) : undefined,
       stage: form.stage,
       status_note: form.statusNote || STAGES[form.stage],
       delayed: false,
@@ -353,6 +356,43 @@ export function CreateShipmentModal({ onClose, existingIds, existingSuppliers }:
             </FormField>
             <FormField label="Incoterm">
               <SelectInput value={form.incoterm} onChange={v => set('incoterm', v)} options={INCTERMS} />
+            </FormField>
+          </div>
+
+          {/* Custom Duty + GST */}
+          <div style={{ display: 'flex', gap: 14 }}>
+            <FormField label="Custom Duty %">
+              <SelectInput
+                value={form.custom_duty}
+                onChange={v => set('custom_duty', v)}
+                options={[
+                  { value: '', label: '— Not set' },
+                  { value: '0', label: '0% (Exempt)' },
+                  { value: '2.5', label: '2.5%' },
+                  { value: '5', label: '5%' },
+                  { value: '7.5', label: '7.5%' },
+                  { value: '10', label: '10%' },
+                  { value: '12.5', label: '12.5%' },
+                  { value: '15', label: '15%' },
+                  { value: '20', label: '20%' },
+                  { value: '25', label: '25%' },
+                  { value: '30', label: '30%' },
+                ]}
+              />
+            </FormField>
+            <FormField label="GST %">
+              <SelectInput
+                value={form.gst}
+                onChange={v => set('gst', v)}
+                options={[
+                  { value: '', label: '— Not set' },
+                  { value: '0', label: '0% (Exempt)' },
+                  { value: '5', label: '5%' },
+                  { value: '12', label: '12%' },
+                  { value: '18', label: '18%' },
+                  { value: '28', label: '28%' },
+                ]}
+              />
             </FormField>
           </div>
 

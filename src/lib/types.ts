@@ -55,6 +55,8 @@ export interface Shipment {
   docs: DocSet
   extra_docs?: ExtraDoc[]
   history: HistoryEntry[]
+  custom_duty?: number   // percentage e.g. 7.5
+  gst?: number           // percentage e.g. 18
   cancelled?: boolean
   created_at?: string
   updated_at?: string

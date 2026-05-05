@@ -366,7 +366,7 @@ export function ShipmentTable({ search, showCreate, onCloseCreate, onNewShipment
                   )}
                 </div>
 
-                {/* ── COL 8: Value ── */}
+                {/* ── COL 8: Value + Duty/GST ── */}
                 <div style={{ textAlign: 'right' as const, paddingTop: 2 }}>
                   <div style={{ fontSize: 13, fontWeight: 700, fontVariantNumeric: 'tabular-nums', color: t.ink }}>
                     {fmtMoney(s.value, s.currency)}
@@ -374,6 +374,32 @@ export function ShipmentTable({ search, showCreate, onCloseCreate, onNewShipment
                   <div style={{ fontSize: 10, color: t.inkSoft, fontFamily: '"JetBrains Mono", monospace', marginTop: 2 }}>
                     {s.currency}
                   </div>
+                  {(s.custom_duty != null || s.gst != null) && (
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 3, marginTop: 6 }}>
+                      {s.custom_duty != null && (
+                        <span style={{
+                          fontSize: 9.5, fontWeight: 700, padding: '2px 6px', borderRadius: 4,
+                          background: mode === 'dark' ? '#1e1a10' : '#fefce8',
+                          color: mode === 'dark' ? '#fbbf24' : '#b45309',
+                          border: `1px solid ${mode === 'dark' ? '#713f12' : '#fde68a'}`,
+                          whiteSpace: 'nowrap',
+                        }}>
+                          Duty {s.custom_duty}%
+                        </span>
+                      )}
+                      {s.gst != null && (
+                        <span style={{
+                          fontSize: 9.5, fontWeight: 700, padding: '2px 6px', borderRadius: 4,
+                          background: mode === 'dark' ? '#0f1f2e' : '#eff6ff',
+                          color: mode === 'dark' ? '#60a5fa' : '#1d4ed8',
+                          border: `1px solid ${mode === 'dark' ? '#1e3a5f' : '#bfdbfe'}`,
+                          whiteSpace: 'nowrap',
+                        }}>
+                          GST {s.gst}%
+                        </span>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {/* ── COL 9: Docs ring ── */}
