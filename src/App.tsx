@@ -1,6 +1,3 @@
-Here's the complete `App.tsx` — select all and paste it into GitHub:
-
-```tsx
 import { useState } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { ThemeProvider, useTheme } from './lib/ThemeContext'
@@ -18,6 +15,7 @@ function AppInner() {
   const [search, setSearch] = useState('')
   const [showCreate, setShowCreate] = useState(false)
 
+  // Full-screen loading spinner while session is being restored
   if (loading) {
     return (
       <div style={{
@@ -42,10 +40,13 @@ function AppInner() {
     )
   }
 
+  // PASSWORD_RECOVERY event fired → show the set-new-password screen
   if (needsPasswordReset) return <ResetPasswordPage />
 
+  // Not logged in → show login page
   if (!user) return <LoginPage />
 
+  // Logged in → full app
   return (
     <div style={{
       display: 'flex', flexDirection: 'column',
@@ -91,4 +92,3 @@ export default function App() {
     </ThemeProvider>
   )
 }
-```
