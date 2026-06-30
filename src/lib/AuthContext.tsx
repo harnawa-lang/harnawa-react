@@ -3,7 +3,6 @@ import { supabase } from './supabase'
 import type { User, Session } from '@supabase/supabase-js'
 
 // ── Admin check ───────────────────────────────────────────────────────
-// Add comma-separated admin emails in .env: VITE_ADMIN_EMAILS=a@b.com,c@d.com
 const ADMIN_EMAILS = (import.meta.env.VITE_ADMIN_EMAILS ?? '')
   .split(',')
   .map((e: string) => e.trim().toLowerCase())
@@ -15,11 +14,13 @@ interface AuthCtx {
   session: Session | null
   loading: boolean
   isAdmin: boolean
+  needsPasswordReset: boolean       // ← NEW: true when PASSWORD_RECOVERY token is active
   signInWithGoogle: () => Promise<void>
-  signInWithEmail:  (email: string, password: string) => Promise<string | null>
-  signUpWithEmail:  (email: string, password: string) => Promise<string | null>
-  resetPassword:    (email: string) => Promise<string | null>
-  signOut:          () => Promise<void>
+  signInWithEmail: (email: string, password: string) => Promise<string | null>
+  signUpWithEmail: (email: string, password: string) => Promise<string | null>
+  resetPassword: (email: string) => Promise<string | null>
+  updatePassword: (newPassword: string) => Promise<string | null>  // ← NEW
+  signOut: () => Promise<void>
 }
 
 const Ctx = createContext<AuthCtx>(null!)
@@ -27,15 +28,14 @@ export const useAuth = () => useContext(Ctx)
 
 // ── Provider ──────────────────────────────────────────────────────────
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user,    setUser]    = useState<User | null>(null)
+  const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
+  const [needsPasswordReset, setNeedsPasswordReset] = useState(false)
 
   useEffect(() => {
-    // Safety timeout — if Supabase is unreachable, stop showing spinner after 6s
     const timeout = setTimeout(() => setLoading(false), 6000)
 
-    // Get current session on mount
     supabase.auth.getSession()
       .then(({ data: { session } }) => {
         clearTimeout(timeout)
@@ -48,12 +48,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setLoading(false)
       })
 
-    // Listen for auth state changes (login / logout / token refresh)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       clearTimeout(timeout)
       setSession(session)
       setUser(session?.user ?? null)
       setLoading(false)
+
+      // When the user clicks the password reset email link, Supabase fires
+      // PASSWORD_RECOVERY. We capture that so the UI can show the reset form.
+      if (event === 'PASSWORD_RECOVERY') {
+        setNeedsPasswordReset(true)
+      } else if (event === 'USER_UPDATED' || event === 'SIGNED_OUT') {
+        setNeedsPasswordReset(false)
+      }
     })
 
     return () => { subscription.unsubscribe(); clearTimeout(timeout) }
@@ -74,7 +81,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const signUpWithEmail = async (email: string, password: string) => {
-    // Domain restriction — only @harnawainc.com allowed
     if (!email.toLowerCase().endsWith('@harnawainc.com')) {
       return 'Signups are restricted to @harnawainc.com email addresses. Contact admin for access.'
     }
@@ -92,14 +98,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return error?.message ?? null
   }
 
+  // Called from the ResetPasswordPage after PASSWORD_RECOVERY event
+  const updatePassword = async (newPassword: string) => {
+    const { error } = await supabase.auth.updateUser({ password: newPassword })
+    if (!error) setNeedsPasswordReset(false)
+    return error?.message ?? null
+  }
+
   const signOut = async () => {
     await supabase.auth.signOut()
   }
 
   return (
     <Ctx.Provider value={{
-      user, session, loading, isAdmin,
-      signInWithGoogle, signInWithEmail, signUpWithEmail, resetPassword, signOut,
+      user, session, loading, isAdmin, needsPasswordReset,
+      signInWithGoogle, signInWithEmail, signUpWithEmail,
+      resetPassword, updatePassword, signOut,
     }}>
       {children}
     </Ctx.Provider>
